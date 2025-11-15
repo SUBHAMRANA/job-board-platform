@@ -1,0 +1,93 @@
+/* A simple, clean layout for our page */
+.container {
+  width: 100%;
+  max-width: 900px; /* Set a max width for readability */
+  margin: 0 auto; /* Center the content */
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: white;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* --- Search Form Styles --- */
+.searchForm {
+  display: flex;
+  gap: 10px; /* Space between items */
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.searchInput {
+  flex-grow: 1; /* Make inputs take up available space */
+  padding: 12px 15px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.searchButton {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background-color: #0070f3; /* A nice blue */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.searchButton:hover {
+  background-color: #005bb5;
+}
+
+/* --- Job List Styles --- */
+.jobList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between cards */
+}
+
+.jobCard {
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.jobCard:hover {
+  border-color: #0070f3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.jobCard h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #0070f3;
+}
+
+.jobCard p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+.companyLocation {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.75rem !important; /* Overrides the 'p' margin */
+}
+
+.noJobsText {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #777;
+  padding: 2rem;
+}

@@ -1,11 +1,9 @@
-// We have REMOVED the 'import styles from ...' line
+import React from 'react';
+import styles from './page.module.css';
 
-async function getJobs() {
+async function getJobs(url: string) {
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/jobs/', {
-      cache: 'no-store',
-    });
-
+    const res = await fetch(url, { cache: 'no-store' });
     if (res.ok) {
       return res.json();
     } else {
@@ -18,27 +16,71 @@ async function getJobs() {
   }
 }
 
-export default async function Home() {
-  const jobs = await getJobs();
+interface Job {
+  id: number;
+  title: string;
+  company_name: string;
+  location: string;
+  description: string;
+}
+
+export default function Home({ searchParams: searchParamsPromise }) {
+  
+  const searchParams = React.use(searchParamsPromise);
+
+  const locationQuery = searchParams?.location || '';
+  const searchQuery = searchParams?.search || '';
+
+  const apiURL = new URL('http://127.0.0.1:8000/api/jobs/');
+  if (locationQuery) {
+    apiURL.searchParams.append('location', locationQuery);
+  }
+  if (searchQuery) {
+    apiURL.searchParams.append('search', searchQuery);
+  }
+
+  const jobsPromise = getJobs(apiURL.toString());
+  const jobs: Job[] = React.use(jobsPromise);
 
   return (
-    // We are using plain HTML tags like <main>, <h1>, <div>
-    // All 'className' props have been removed.
-    <main>
-      <h1>Welcome to your Job Board</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>Welcome to your Job Board</h1>
 
-      <div>
+      <form method="GET" action="/" className={styles.searchForm}>
+        <input
+          type="text"
+          name="search"
+          placeholder="Search for a job..."
+          defaultValue={searchQuery}
+          className={styles.searchInput}
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Location..."
+          defaultValue={locationQuery}
+          className={styles.searchInput}
+        />
+        <button type="submit" className={styles.searchButton}>
+          Search
+        </button>
+      </form>
+
+      <div className={styles.jobList}>
         {jobs.length > 0 ? (
           jobs.map((job) => (
-            // Using a simple <div> for the card
-            <div key={job.id} style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}>
+            <div key={job.id} className={styles.jobCard}>
               <h2>{job.title}</h2>
-              <p>{job.company_name} - {job.location}</p>
-              <p>{job.description.substring(0, 100)}...</p>
+              <p className={styles.companyLocation}>
+                {job.company_name} - {job.location}
+              </p>
+              <p>{job.description.substring(0, 150)}...</p>
             </div>
           ))
         ) : (
-          <p>No approved jobs found. Check back later!</p>
+          <p className={styles.noJobsText}>
+            No jobs found matching your search.
+          </p>
         )}
       </div>
     </main>
