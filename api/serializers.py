@@ -1,21 +1,36 @@
 from rest_framework import serializers
 from .models import User, Job, Application
 
-# Serializer for our custom User model
 class UserSerializer(serializers.ModelSerializer):
+    # We add 'password' here so we can write to it, 
+    # but 'write_only=True' ensures it NEVER comes back in the response.
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        # We list the *specific* fields we want to expose.
-        # NEVER expose the 'password' field!
-        fields = ['id', 'username', 'email', 'role']
+        fields = ['id', 'username', 'email', 'role', 'password']
+
+    # This function runs when we create a new user
+    def create(self, validated_data):
+        # We pop (remove) the password from the data...
+        password = validated_data.pop('password')
+
+        # ...create the user instance...
+        user = User(**validated_data)
+
+        # ...and properly hash the password!
+        user.set_password(password)
+        user.save()
+        return user
 
 # Serializer for the Job model
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
-        # '__all__' is a simple shortcut to include all fields 
-        # from the model.
         fields = '__all__'
+        # ADD THIS LINE:
+        # This tells Django: "Don't ask the user for this field."
+        read_only_fields = ['recruiter']
 
 # Serializer for the Application model
 class ApplicationSerializer(serializers.ModelSerializer):
