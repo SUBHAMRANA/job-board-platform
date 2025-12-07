@@ -48,7 +48,7 @@ Follow these steps to run the project locally.
 ```bash
 git clone [https://github.com/yourusername/job-board.git](https://github.com/yourusername/job-board.git)
 cd job-board
-
+```
 ### 3. Backend Setup (Django)
 
 1.  **Create and activate a virtual environment:**
